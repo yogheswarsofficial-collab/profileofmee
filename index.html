@@ -36,22 +36,29 @@
         /**************************************************
          * BASE & CURSOR STYLES             *
          **************************************************/
-         /* * 1. Default/Reset for Mobile: Ensures the cursor is the standard one 
- * on smaller screens (up to 991px). 
+         /*
+ * CURSOR DISABLE FOR MOBILE 
+ * Ensures the custom cursor is fully disabled on screens up to 991px wide.
  */
 @media (max-width: 991px) {
-    body {
-        cursor: default !important; /* Forces the default cursor */
+    /* 1. FORCE DEFAULT CURSOR: Overrides any 'cursor: none;' on the body or other elements */
+    * {
+        cursor: default !important;
+    }
+
+    /* 2. HIDE CUSTOM CURSOR ELEMENT: Hides the div/element that is animated */
+    .custom-cursor {
+        display: none !important;
     }
 }
 
-/* * 2. Custom Cursor for PC/Desktop: Applies your custom cursor 
- * only on screens 992px and wider.
+/* * CURSOR ENABLE FOR DESKTOP
+ * (Optional: only if you previously used 'cursor: none;' globally)
+ * This ensures the element only shows up on PC.
  */
 @media (min-width: 992px) {
-    body {
-        /* *** REPLACE THIS LINE with your actual custom cursor CSS *** */
-        cursor: url('path/to/your/cursor.png') 16 16, auto; 
+    .custom-cursor {
+        display: block !important; /* or whatever your original display property was (e.g., flex) */
     }
 }
         * {
