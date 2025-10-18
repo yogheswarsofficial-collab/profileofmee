@@ -39,7 +39,7 @@ body.light-theme {
 * Ensures the custom cursor is fully disabled on screens up to 991px wide.
 */
 @media (max-width: 991px) {
-/* 1. FORCE DEFAULT CURSOR: Overrides any 'cursor: none;' on the body or other elements */
+/* 1. FORCE DEFAULT CURSOR: Overrides any 'cursor: default;' on the body or other elements */
 * {
 cursor: default !important;
 }
@@ -526,25 +526,65 @@ opacity: 0.8;
 }
 
 /**************************************************
-* EVENTS/WORKSHOP SECTION (Card with Image) *
+* EVENTS/WORKSHOP SECTION (MODIFIED TO SLIDER) *
 **************************************************/
-.event-list {
-max-width: 1000px;
+
+/* NEW: Slider Container */
+.event-slider-container {
+position: relative; /* MODIFICATION: For arrow positioning */
+width: 100%;
 margin: 3rem auto 0;
-text-align: left;
+/* MODIFICATION: Add padding for arrows */
+padding: 0 50px;
 }
+
+/* NEW: Wrapper for the track to apply overflow */
+.event-slider-track-wrapper {
+width: 100%;
+overflow: hidden;
+}
+
+/* MODIFIED: Event list is now the slider track */
+.event-list {
+display: flex;
+/* MODIFICATION: Added "bounce" animation */
+transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* MODIFIED: Event Item styles for slider */
 .event-item {
 background-color: var(--section-bg-color);
-border-left: 5px solid var(--purple);
+/* MODIFICATION: Theme line moved to top */
+border-top: 5px solid var(--purple);
+border-left: none;
 padding: 1rem;
-margin-bottom: 1.5rem;
 border-radius: 8px;
-box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+/* MODIFICATION: Shadow like project cards */
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 
 display: flex;
-align-items: center;
-gap: 1.5rem;
+flex-direction: column; /* All items are column layout */
+align-items: flex-start; /* Align content start */
+
+/* MODIFICATION: Set flex-shrink and basis for slider items */
+flex-shrink: 0;
+/* width/basis is set by JS */
+
+/* MODIFICATION: Set min-height for equal size */
+min-height: 440px;
+
+/* MODIFICATION: Add transitions for pop-in animation */
+opacity: 0.5;
+transform: scale(0.95);
+transition: opacity 0.5s ease, transform 0.5s ease, 
+border-color 0.3s ease, background-color 0.3s ease,
+box-shadow 0.3s ease; /* Added shadow transition */
+}
+
+/* NEW: Class for visible items */
+.event-item.is-visible {
+opacity: 1;
+transform: scale(1);
 }
 
 /* New Staggered Animation for event items (Simple Slide-In) */
@@ -557,49 +597,87 @@ transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.5, 0.1, 1)
 opacity: 1;
 transform: translateX(0);
 }
-/* Adjusted staggered animation for even items */
-.event-item:nth-child(even).reveal {
-transform: translateX(50px); /* Simple slide-in from right */
-}
-.event-item:nth-child(even).reveal.visible {
-transform: translateX(0);
-}
-.event-item:nth-child(even) {
-flex-direction: row-reverse; /* Alternate image position (Image on Right) */
-border-left: none;
-border-right: 5px solid var(--purple);
-}
+
+
 .event-item:hover {
-transform: translateY(-5px) scale(1.01); /* Lift up effect */
-border-color: var(--blue);
+transform: translateY(-5px) scale(1.02); /* Lift up effect (only if visible) */
+/* MODIFICATION: Update border-top-color */
+border-top-color: var(--blue);
 background-color: var(--input-bg-color); /* Subtle background change */
+/* MODIFICATION: Hover shadow like project cards */
+box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
-.event-item:nth-child(even):hover {
-transform: translateY(-5px) scale(1.01);
-border-color: var(--blue);
+/* Ensure hover only scales if visible */
+.event-item:not(.is-visible):hover {
+transform: scale(0.95);
+box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Keep original shadow */
 }
+
+
+/* MODIFIED: Event Image Wrapper (SQUARE) */
 .event-image-wrapper {
 cursor: pointer;
-width: 30%;
-min-width: 150px;
-max-width: 250px;
-height: 150px;
+width: 100%; /* MODIFICATION: Full width of card */
+/* MODIFICATION: Fixed height to match project cards */
+height: 200px; 
 overflow: hidden;
 border-radius: 6px;
+margin-bottom: 1rem; /* MODIFICATION: Added margin for spacing */
 }
+
+/* MODIFICATION: Event image wrapper is now a link */
+.event-image-wrapper-link {
+display: block;
+text-decoration: none;
+}
+
+
 .event-image-wrapper img {
 width: 100%;
 height: 100%;
 object-fit: cover;
+/* MODIFICATION: Updated transition for new animations */
 transition: transform 0.5s ease;
 }
-.event-item:hover .event-image-wrapper img {
-transform: scale(1.1); /* More pronounced zoom effect */
+
+/* NEW ANIMATION: Ken Burns (slow zoom) on visible items */
+.event-item.is-visible .event-image-wrapper img {
+transform: scale(1.05);
 }
+/* NEW ANIMATION: More pronounced zoom on hover */
+.event-item:hover .event-image-wrapper img {
+transform: scale(1.15);
+}
+
+
 .event-content {
 flex-grow: 1;
 padding-left: 0.5rem;
+width: 100%; /* MODIFICATION: Ensure content takes full width */
 }
+
+/* NEW ANIMATION: Content fly-in */
+.event-content > * {
+opacity: 0;
+transform: translateY(15px);
+transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.event-item.is-visible .event-content > * {
+opacity: 1;
+transform: translateY(0);
+}
+/* Staggered delay for content */
+.event-item.is-visible .event-content h4 {
+transition-delay: 0.3s;
+}
+.event-item.is-visible .event-content p {
+transition-delay: 0.4s;
+}
+.event-item.is-visible .event-content span {
+transition-delay: 0.5s;
+}
+
+
 .event-item h4 {
 font-size: 1.25rem;
 color: var(--heading-color-solid);
@@ -616,8 +694,52 @@ color: var(--purple);
 font-weight: 600;
 }
 body.light-theme .event-item {
-border-left-color: var(--purple);
+/* MODIFICATION: Update border-top-color */
+border-top-color: var(--purple);
+border-left-color: transparent; /* Ensure left border is off */
 }
+
+/* NEW: Slider Arrow Styles */
+.slider-arrow {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+z-index: 10;
+width: 44px;
+height: 44px;
+border-radius: 50%;
+background-color: rgba(18, 15, 29, 0.7);
+backdrop-filter: blur(5px);
+border: 1px solid var(--input-bg-color);
+color: var(--text-color);
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.3s ease;
+}
+.slider-arrow:hover {
+background-color: var(--purple);
+transform: translateY(-50%) scale(1.1);
+}
+.slider-arrow:disabled {
+opacity: 0.3;
+pointer-events: none;
+transform: translateY(-50%) scale(0.9);
+}
+.slider-arrow svg {
+width: 24px;
+height: 24px;
+stroke: currentColor;
+}
+/* MODIFICATION: Position arrows inside the padding */
+#event-prev {
+left: 0px; 
+}
+#event-next {
+right: 0px;
+}
+
+
 /* --- Reusable Modal Styles (Pop-out effect) --- */
 .modal-overlay {
 position: fixed;
@@ -712,22 +834,24 @@ text-align: center;
 background: var(--blue);
 }
 
-/* MODIFICATION: Styles for Image-Only Event Modal */
+/* MODIFICATION: Styles for Image-Only Event Modal (NO LONGER USED) */
+/*
 #eventModal .modal-content {
-padding: 1rem; /* Reduce padding for image */
-width: auto; /* Fit to image width */
-max-width: 80vw; /* Max 80% of viewport width */
+padding: 1rem; 
+width: auto; 
+max-width: 80vw; 
 }
 #eventModal .modal-image {
-margin-bottom: 0; /* Remove margin */
-height: auto; /* Maintain aspect ratio */
-max-height: 80vh; /* Max 80% of viewport height */
+margin-bottom: 0; 
+height: auto; 
+max-height: 80vh;
 }
 #eventModal #modalTitle,
 #eventModal #modalDescription,
 #eventModal #modalSource {
-display: none; /* Hide text elements */
+display: none;
 }
+*/
 
 
 /**************************************************
@@ -904,6 +1028,13 @@ stroke: #ffffff;
 h2.section-title, #home .hero-text h1 { font-size: 2.5rem; }
 .image-wrapper { width: 280px; height: 280px; }
 .info-card { width: 250px; }
+
+/* MODIFICATION: Event slider responsive */
+.event-slider-container {
+padding: 0 40px; /* Space for arrows */
+}
+#event-prev { left: -5px; }
+#event-next { right: -5px; }
 }
 @media (max-width: 768px) {
 .form-row { flex-direction: column; }
@@ -911,29 +1042,14 @@ h2.section-title, #home .hero-text h1 { font-size: 2.5rem; }
 .preloader-content p { font-size: 1rem; }
 .info-cards-grid { flex-direction: column; align-items: center; gap: 1.5rem; }
 .info-card { width: 100%; max-width: 350px; }
-/* Responsive adjustments for mobile event list */
-.event-item {
-flex-direction: column;
-align-items: flex-start;
-padding: 1.5rem;
+
+/* MODIFICATION: Event slider responsive for mobile */
+.event-slider-container {
+padding: 0 35px; /* Less padding on mobile */
 }
-.event-item:nth-child(even) {
-flex-direction: column;
-border-right: none;
-border-left: 5px solid var(--purple);
-}
-.event-item:hover, .event-item:nth-child(even):hover {
-transform: none;
-}
-.event-image-wrapper {
-width: 100%;
-max-width: 100%;
-height: 180px;
-margin-bottom: 1rem;
-}
-.event-content {
-padding-left: 0;
-}
+#event-prev { left: -10px; width: 40px; height: 40px;} /* Move slightly out */
+#event-next { right: -10px; width: 40px; height: 40px;}
+
 .modal-content {
 padding: 1.5rem;
 }
@@ -1782,6 +1898,9 @@ These credentials validate my ability to leverage industry-standard tools for da
 <h2 class="section-title reveal"><span class="gradient-text">Events &</span> Workshops</h2>
 <p class="reveal" style="transition-delay: 150ms;">A list of workshops, hackathons, and certifications that have deepened my expertise in data analytics and technology.</p>
 
+<div class="event-slider-container reveal" style="transition-delay: 250ms;">
+
+<div class="event-slider-track-wrapper">
 <div class="event-list">
 
 <div class="event-item reveal"
@@ -1790,9 +1909,11 @@ data-title="Skill Technical Workshop on Python Programming"
 data-description="Gained hands-on knowledge from industry experts, engaged with peers, and explored innovative tech exhibits, strengthening core programming skills for data analysis."
 data-source="In association with Pragyan, NIT Trichy | National Institute of Technology, Tiruchirappalli"
 data-img="Images/NIT.jpg">
+<a href="Images/NIT.jpg" target="_blank" class="event-image-wrapper-link" title="Skill Technical Workshop on Python Programming">
 <div class="event-image-wrapper">
 <img src="Images/NIT.jpg" alt="Python Workshop at NIT Trichy">
 </div>
+</a>
 <div class="event-content">
 <h4>Skill Technical Workshop on Python Programming</h4>
 <p>Gained **hands-on knowledge from industry experts**, engaged with peers, and explored innovative tech exhibits, strengthening core programming skills for data analysis.</p>
@@ -1805,9 +1926,11 @@ data-title="Office Master's Power BI Workshop"
 data-description="Focused on effective data cleaning and processing, building AI-powered interactive dashboards, and hands-on practice in creating compelling visualizations."
 data-source="Location: Online | Workshop Series"
 data-img="Images/event.workshop.powerbi.jpg">
+<a href="Images/event.workshop.powerbi.jpg" target="_blank" class="event-image-wrapper-link" title="Office Master's Power BI Workshop">
 <div class="event-image-wrapper">
 <img src="Images/event.workshop.powerbi.jpg" alt="Power BI Workshop">
 </div>
+</a>
 <div class="event-content">
 <h4>Office Master's Power BI Workshop</h4>
 <p>Focused on **effective data cleaning and processing**, building **AI-powered interactive dashboards**, and hands-on practice in creating compelling visualizations.</p>
@@ -1820,9 +1943,11 @@ data-title="Deloitte Australia Data Analytics Virtual Job Simulation"
 data-description="Completed the Forage program, building an interactive data dashboard using Tableau and applying Excel to classify datasets and derive meaningful business insights. Strengthened analytical and visualization skills."
 data-source="Platform: Forage | Virtual Job Experience Program"
 data-img="Images/job simulation.jpg">
+<a href="Images/job simulation.jpg" target="_blank" class="event-image-wrapper-link" title="Deloitte Australia Data Analytics Virtual Job Simulation">
 <div class="event-image-wrapper">
 <img src="Images/job simulation.jpg" alt="Deloitte Job Simulation">
 </div>
+</a>
 <div class="event-content">
 <h4>Deloitte Australia Data Analytics Virtual Job Simulation</h4>
 <p>Completed the Forage program, building an interactive data dashboard using **Tableau** and applying **Excel** to classify datasets and derive meaningful business insights.
@@ -1837,9 +1962,11 @@ data-title="Project: Automated Bus Scheduling and Route Management (AutoRoute)"
 data-description="An AI and GPS based bus route optimization platform designed to improve operational efficiency, reduce fuel consumption, and enhance passenger experience."
 data-source="Ministry of Micro, Small & Medium Enterprises | Aug 2025"
 data-img="Images/msmi.jpg">
+<a href="Images/msmi.jpg" target="_blank" class="event-image-wrapper-link" title="Project: Automated Bus Scheduling and Route Management (AutoRoute)">
 <div class="event-image-wrapper">
 <img src="Images/msmi.jpg" alt="MSME Project">
 </div>
+</a>
 <div class="event-content">
 <h4>Project: Automated Bus Scheduling and Route Management (AutoRoute)</h4>
 <p>An AI and GPS based bus route optimization platform designed to **improve operational efficiency**, reduce fuel consumption, and enhance passenger experience.</p>
@@ -1852,17 +1979,25 @@ data-title="Smart Electric Fence Monitoring System"
 data-description="Project Idea for Smart India Hackathon: A system using sensors and IoT to detect and prevent unauthorized electricity theft from fences, providing real-time alerts to stop misuse and ensure safety."
 data-source="Smart India Hackathon | Sep 2025"
 data-img="Images/sih.jpg">
+<a href="Images/sih.jpg" target="_blank" class="event-image-wrapper-link" title="Smart Electric Fence Monitoring System">
 <div class="event-image-wrapper">
 <img src="Images/sih.jpg" alt="Smart India Hackathon">
 </div>
+</a>
 <div class="event-content">
 <h4>Smart Electric Fence Monitoring System</h4>
 <p>Project Idea for **Smart India Hackathon**: A system using sensors and IoT to detect and prevent unauthorized electricity theft from fences, providing **real-time alerts** to stop misuse and ensure safety.</p>
 <span>Smart India Hackathon | Sep 2025</span>
 </div>
 </div>
-</div>
-</div>
+</div> </div> <button class="slider-arrow" id="event-prev" aria-label="Previous event">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<button class="slider-arrow" id="event-next" aria-label="Next event">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+
+</div> </div>
 </section>
 <section id="projects">
 <div class="section-container">
@@ -1883,7 +2018,7 @@ data-img="Images/sih.jpg">
 <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&q=80&w=800" class="project-card-image" alt="Coming Soon Placeholder">
 <div class="project-card-content">
 <h3><span class="gradient-text">Coming Soon...</span></h3>
-<p>This project is currently under development. Stay tuned for an exciting new data analysis case study!</p>
+<p>This project is. Stay tuned for an exciting new data analysis case study!</p>
 <div class="project-card-links">
 <a href="#">Live Demo</a> <a href="#">GitHub</a>
 </div>
@@ -1917,7 +2052,7 @@ data-img="Images/sih.jpg">
 </form>
 <div class="social-icons reveal" style="transition-delay: 350ms;">
 <a href="https://www.linkedin.com/in/da-yogheswar" aria-label="LinkedIn" target="_blank"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-<a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+<a href="https://github.com/yogheswarsofficial-collab" aria-label="GitHub" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=yogheswar.sofficial@gmail.com" aria-label="Gmail" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg></a>
 </div>
 </div>
@@ -1926,16 +2061,6 @@ data-img="Images/sih.jpg">
 <a href="#home" id="scrollToTopBtn" aria-label="Go to top">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </a>
-
-<div id="eventModal" class="modal-overlay">
-<div class="modal-content">
-<button class="modal-close" id="closeEventModal">&times;</button>
-<img id="modalImage" class="modal-image" src="" alt="Event Image">
-<h4 id="modalTitle"></h4>
-<p id="modalDescription"></p>
-<span id="modalSource"></span>
-</div>
-</div>
 
 <div id="connectModal" class="modal-overlay">
 <div class="modal-content" id="connectModalContent"> <button class="modal-close" id="closeConnectModal">&times;</button>
@@ -2109,47 +2234,113 @@ closeConnectModal();
 });
 }
 
-// --- MODAL FUNCTIONALITY (Only for Events) ---
-const eventModal = document.getElementById('eventModal');
-const closeEventModalBtn = document.getElementById('closeEventModal');
+// --- MODIFICATION: MODAL FUNCTIONALITY (Only for Events) ---
+// This section has been removed as event images now open in a new tab.
 
-const eventItems = document.querySelectorAll('.event-item');
-function openEventModal(item) {
-// Ensure to handle potential local file paths by using the attribute for the modal
-const imgPath = item.getAttribute('data-img');
-const title = item.getAttribute('data-title');
-const description = item.getAttribute('data-description');
-const source = item.getAttribute('data-source');
-
-document.querySelector('#eventModal #modalImage').src = imgPath;
-document.querySelector('#eventModal #modalTitle').textContent = title;
-document.querySelector('#eventModal #modalDescription').textContent = description;
-document.querySelector('#eventModal #modalSource').textContent = source;
-eventModal.classList.add('active');
-document.body.style.overflow = 'hidden'; // Prevent background scrolling
-}
-function closeEventModal() {
-eventModal.classList.remove('active');
-document.body.style.overflow = '';
-}
-// Attach event listener for events
-eventItems.forEach(item => {
-const imageWrapper = item.querySelector('.event-image-wrapper');
-imageWrapper.addEventListener('click', (e) => {
-e.preventDefault();
-openEventModal(item);
+// --- NEW: EVENT TAB TITLE CHANGER ---
+const originalTitle = document.title;
+document.querySelectorAll('.event-item').forEach(item => {
+const eventTitle = item.getAttribute('data-title');
+item.addEventListener('mouseenter', () => {
+document.title = eventTitle;
+});
+item.addEventListener('mouseleave', () => {
+document.title = originalTitle;
 });
 });
 
-// Close modal via button
-closeEventModalBtn.addEventListener('click', () => closeEventModal());
+// --- NEW: EVENT SLIDER LOGIC ---
+function initEventSlider() {
+const sliderContainer = document.querySelector('.event-slider-container');
+if (!sliderContainer) return; // Exit if slider doesn't exist
 
-// Close modal by clicking the overlay
-eventModal.addEventListener('click', (e) => {
-if (e.target.classList.contains('modal-overlay')) {
-closeEventModal();
+const trackWrapper = sliderContainer.querySelector('.event-slider-track-wrapper');
+const track = sliderContainer.querySelector('.event-list');
+const items = sliderContainer.querySelectorAll('.event-item');
+const prevBtn = sliderContainer.querySelector('#event-prev');
+const nextBtn = sliderContainer.querySelector('#event-next');
+// MODIFICATION: Increased gap
+const gap = 32; 
+
+let currentIndex = 0;
+let itemsPerView = 3;
+let itemWidth = 0;
+let totalItems = items.length;
+
+function updateSlider() {
+const windowWidth = window.innerWidth;
+
+// 1. Determine itemsPerView based on screen size
+if (windowWidth <= 768) {
+itemsPerView = 1;
+} else if (windowWidth <= 992) {
+itemsPerView = 2;
+} else {
+itemsPerView = 3;
+}
+
+// 2. Calculate the width of a single item
+// Use the trackWrapper's width for calculation
+const containerWidth = trackWrapper.clientWidth;
+itemWidth = (containerWidth - (gap * (itemsPerView - 1))) / itemsPerView;
+
+// 3. Apply styles to track and items
+track.style.gap = `${gap}px`;
+items.forEach(item => {
+item.style.flexBasis = `${itemWidth}px`;
+});
+
+// 4. Check index bounds
+if (currentIndex > totalItems - itemsPerView) {
+currentIndex = totalItems - itemsPerView;
+}
+if (currentIndex < 0) {
+currentIndex = 0;
+}
+
+// 5. Calculate and apply transform
+// We move by the item width + one gap
+const offset = currentIndex * (itemWidth + gap);
+track.style.transform = `translateX(-${offset}px)`;
+
+// 6. Update button states
+prevBtn.disabled = currentIndex === 0;
+nextBtn.disabled = currentIndex >= totalItems - itemsPerView;
+
+// 7. NEW: Update is-visible class for animations
+items.forEach((item, index) => {
+item.classList.remove('is-visible');
+});
+for (let i = currentIndex; i < currentIndex + itemsPerView; i++) {
+if (items[i]) {
+items[i].classList.add('is-visible');
+}
+}
+}
+
+// Event Listeners
+nextBtn.addEventListener('click', () => {
+if (currentIndex < totalItems - itemsPerView) {
+currentIndex++;
+updateSlider();
 }
 });
+
+prevBtn.addEventListener('click', () => {
+if (currentIndex > 0) {
+currentIndex--;
+updateSlider();
+}
+});
+
+// Initial setup and resize handling
+window.addEventListener('resize', updateSlider);
+// HACK: Use a slight delay to ensure correct width calculation after layout shift
+setTimeout(updateSlider, 100);
+}
+
+initEventSlider(); // Initialize the slider
+
 });
 </script>
 </body>
