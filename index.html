@@ -36,6 +36,24 @@
         /**************************************************
          * BASE & CURSOR STYLES             *
          **************************************************/
+         /* * 1. Default/Reset for Mobile: Ensures the cursor is the standard one 
+ * on smaller screens (up to 991px). 
+ */
+@media (max-width: 991px) {
+    body {
+        cursor: default !important; /* Forces the default cursor */
+    }
+}
+
+/* * 2. Custom Cursor for PC/Desktop: Applies your custom cursor 
+ * only on screens 992px and wider.
+ */
+@media (min-width: 992px) {
+    body {
+        /* *** REPLACE THIS LINE with your actual custom cursor CSS *** */
+        cursor: url('path/to/your/cursor.png') 16 16, auto; 
+    }
+}
         * {
             margin: 0;
             padding: 0;
@@ -1960,7 +1978,6 @@ To further enhance my capabilities, I am currently expanding my knowledge of Pyt
 
 </body>
 </html>
-
 
 
 
