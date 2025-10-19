@@ -31,6 +31,66 @@ body.light-theme {
 --purple: #5a3e8d; /* Darker purple for light theme contrast */
 --blue: #2980b9;  /* Darker blue for light theme contrast */
 }
+/* General mobile fix */
+@media screen and (max-width: 768px) {
+  body {
+    padding: 0 15px;
+    text-align: center;
+  }
+
+  header, section {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-section img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+
+  h1, h2, h3, p {
+    text-align: center;
+    line-height: 1.5;
+    margin: 0 auto 10px;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .buttons button, .buttons a {
+    width: 80%;
+    max-width: 250px;
+    text-align: center;
+  }
+
+  /* Fix About Me section */
+  #about {
+    margin-top: 40px;
+    padding: 0 10px;
+  }
+
+  #about p {
+    font-size: 15px;
+    line-height: 1.6;
+    text-align: justify;
+  }
+}
+
 /**************************************************
 * BASE & CURSOR STYLES             *
 **************************************************/
@@ -39,7 +99,7 @@ body.light-theme {
 * Ensures the custom cursor is fully disabled on screens up to 991px wide.
 */
 @media (max-width: 991px) {
-/* 1. FORCE DEFAULT CURSOR: Overrides any 'cursor: default;' on the body or other elements */
+/* 1. FORCE DEFAULT CURSOR: Overrides any 'cursor: none;' on the body or other elements */
 * {
 cursor: default !important;
 }
@@ -559,8 +619,7 @@ border-top: 5px solid var(--purple);
 border-left: none;
 padding: 1rem;
 border-radius: 8px;
-/* MODIFICATION: Shadow like project cards */
-box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 
 display: flex;
 flex-direction: column; /* All items are column layout */
@@ -577,8 +636,7 @@ min-height: 440px;
 opacity: 0.5;
 transform: scale(0.95);
 transition: opacity 0.5s ease, transform 0.5s ease, 
-border-color 0.3s ease, background-color 0.3s ease,
-box-shadow 0.3s ease; /* Added shadow transition */
+border-color 0.3s ease, background-color 0.3s ease;
 }
 
 /* NEW: Class for visible items */
@@ -604,13 +662,10 @@ transform: translateY(-5px) scale(1.02); /* Lift up effect (only if visible) */
 /* MODIFICATION: Update border-top-color */
 border-top-color: var(--blue);
 background-color: var(--input-bg-color); /* Subtle background change */
-/* MODIFICATION: Hover shadow like project cards */
-box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 /* Ensure hover only scales if visible */
 .event-item:not(.is-visible):hover {
 transform: scale(0.95);
-box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Keep original shadow */
 }
 
 
@@ -625,59 +680,20 @@ border-radius: 6px;
 margin-bottom: 1rem; /* MODIFICATION: Added margin for spacing */
 }
 
-/* MODIFICATION: Event image wrapper is now a link */
-.event-image-wrapper-link {
-display: block;
-text-decoration: none;
-}
-
-
 .event-image-wrapper img {
 width: 100%;
 height: 100%;
 object-fit: cover;
-/* MODIFICATION: Updated transition for new animations */
 transition: transform 0.5s ease;
 }
-
-/* NEW ANIMATION: Ken Burns (slow zoom) on visible items */
-.event-item.is-visible .event-image-wrapper img {
-transform: scale(1.05);
-}
-/* NEW ANIMATION: More pronounced zoom on hover */
 .event-item:hover .event-image-wrapper img {
-transform: scale(1.15);
+transform: scale(1.1); /* More pronounced zoom effect */
 }
-
-
 .event-content {
 flex-grow: 1;
 padding-left: 0.5rem;
 width: 100%; /* MODIFICATION: Ensure content takes full width */
 }
-
-/* NEW ANIMATION: Content fly-in */
-.event-content > * {
-opacity: 0;
-transform: translateY(15px);
-transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.event-item.is-visible .event-content > * {
-opacity: 1;
-transform: translateY(0);
-}
-/* Staggered delay for content */
-.event-item.is-visible .event-content h4 {
-transition-delay: 0.3s;
-}
-.event-item.is-visible .event-content p {
-transition-delay: 0.4s;
-}
-.event-item.is-visible .event-content span {
-transition-delay: 0.5s;
-}
-
-
 .event-item h4 {
 font-size: 1.25rem;
 color: var(--heading-color-solid);
@@ -834,24 +850,22 @@ text-align: center;
 background: var(--blue);
 }
 
-/* MODIFICATION: Styles for Image-Only Event Modal (NO LONGER USED) */
-/*
+/* MODIFICATION: Styles for Image-Only Event Modal */
 #eventModal .modal-content {
-padding: 1rem; 
-width: auto; 
-max-width: 80vw; 
+padding: 1rem; /* Reduce padding for image */
+width: auto; /* Fit to image width */
+max-width: 80vw; /* Max 80% of viewport width */
 }
 #eventModal .modal-image {
-margin-bottom: 0; 
-height: auto; 
-max-height: 80vh;
+margin-bottom: 0; /* Remove margin */
+height: auto; /* Maintain aspect ratio */
+max-height: 80vh; /* Max 80% of viewport height */
 }
 #eventModal #modalTitle,
 #eventModal #modalDescription,
 #eventModal #modalSource {
-display: none;
+display: none; /* Hide text elements */
 }
-*/
 
 
 /**************************************************
@@ -1909,11 +1923,9 @@ data-title="Skill Technical Workshop on Python Programming"
 data-description="Gained hands-on knowledge from industry experts, engaged with peers, and explored innovative tech exhibits, strengthening core programming skills for data analysis."
 data-source="In association with Pragyan, NIT Trichy | National Institute of Technology, Tiruchirappalli"
 data-img="Images/NIT.jpg">
-<a href="Images/NIT.jpg" target="_blank" class="event-image-wrapper-link" title="Skill Technical Workshop on Python Programming">
 <div class="event-image-wrapper">
 <img src="Images/NIT.jpg" alt="Python Workshop at NIT Trichy">
 </div>
-</a>
 <div class="event-content">
 <h4>Skill Technical Workshop on Python Programming</h4>
 <p>Gained **hands-on knowledge from industry experts**, engaged with peers, and explored innovative tech exhibits, strengthening core programming skills for data analysis.</p>
@@ -1926,11 +1938,9 @@ data-title="Office Master's Power BI Workshop"
 data-description="Focused on effective data cleaning and processing, building AI-powered interactive dashboards, and hands-on practice in creating compelling visualizations."
 data-source="Location: Online | Workshop Series"
 data-img="Images/event.workshop.powerbi.jpg">
-<a href="Images/event.workshop.powerbi.jpg" target="_blank" class="event-image-wrapper-link" title="Office Master's Power BI Workshop">
 <div class="event-image-wrapper">
 <img src="Images/event.workshop.powerbi.jpg" alt="Power BI Workshop">
 </div>
-</a>
 <div class="event-content">
 <h4>Office Master's Power BI Workshop</h4>
 <p>Focused on **effective data cleaning and processing**, building **AI-powered interactive dashboards**, and hands-on practice in creating compelling visualizations.</p>
@@ -1943,11 +1953,9 @@ data-title="Deloitte Australia Data Analytics Virtual Job Simulation"
 data-description="Completed the Forage program, building an interactive data dashboard using Tableau and applying Excel to classify datasets and derive meaningful business insights. Strengthened analytical and visualization skills."
 data-source="Platform: Forage | Virtual Job Experience Program"
 data-img="Images/job simulation.jpg">
-<a href="Images/job simulation.jpg" target="_blank" class="event-image-wrapper-link" title="Deloitte Australia Data Analytics Virtual Job Simulation">
 <div class="event-image-wrapper">
 <img src="Images/job simulation.jpg" alt="Deloitte Job Simulation">
 </div>
-</a>
 <div class="event-content">
 <h4>Deloitte Australia Data Analytics Virtual Job Simulation</h4>
 <p>Completed the Forage program, building an interactive data dashboard using **Tableau** and applying **Excel** to classify datasets and derive meaningful business insights.
@@ -1962,11 +1970,9 @@ data-title="Project: Automated Bus Scheduling and Route Management (AutoRoute)"
 data-description="An AI and GPS based bus route optimization platform designed to improve operational efficiency, reduce fuel consumption, and enhance passenger experience."
 data-source="Ministry of Micro, Small & Medium Enterprises | Aug 2025"
 data-img="Images/msmi.jpg">
-<a href="Images/msmi.jpg" target="_blank" class="event-image-wrapper-link" title="Project: Automated Bus Scheduling and Route Management (AutoRoute)">
 <div class="event-image-wrapper">
 <img src="Images/msmi.jpg" alt="MSME Project">
 </div>
-</a>
 <div class="event-content">
 <h4>Project: Automated Bus Scheduling and Route Management (AutoRoute)</h4>
 <p>An AI and GPS based bus route optimization platform designed to **improve operational efficiency**, reduce fuel consumption, and enhance passenger experience.</p>
@@ -1979,11 +1985,9 @@ data-title="Smart Electric Fence Monitoring System"
 data-description="Project Idea for Smart India Hackathon: A system using sensors and IoT to detect and prevent unauthorized electricity theft from fences, providing real-time alerts to stop misuse and ensure safety."
 data-source="Smart India Hackathon | Sep 2025"
 data-img="Images/sih.jpg">
-<a href="Images/sih.jpg" target="_blank" class="event-image-wrapper-link" title="Smart Electric Fence Monitoring System">
 <div class="event-image-wrapper">
 <img src="Images/sih.jpg" alt="Smart India Hackathon">
 </div>
-</a>
 <div class="event-content">
 <h4>Smart Electric Fence Monitoring System</h4>
 <p>Project Idea for **Smart India Hackathon**: A system using sensors and IoT to detect and prevent unauthorized electricity theft from fences, providing **real-time alerts** to stop misuse and ensure safety.</p>
@@ -1991,7 +1995,7 @@ data-img="Images/sih.jpg">
 </div>
 </div>
 </div> </div> <button class="slider-arrow" id="event-prev" aria-label="Previous event">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
 </button>
 <button class="slider-arrow" id="event-next" aria-label="Next event">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -2061,6 +2065,16 @@ data-img="Images/sih.jpg">
 <a href="#home" id="scrollToTopBtn" aria-label="Go to top">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </a>
+
+<div id="eventModal" class="modal-overlay">
+<div class="modal-content">
+<button class="modal-close" id="closeEventModal">&times;</button>
+<img id="modalImage" class="modal-image" src="" alt="Event Image">
+<h4 id="modalTitle"></h4>
+<p id="modalDescription"></p>
+<span id="modalSource"></span>
+</div>
+</div>
 
 <div id="connectModal" class="modal-overlay">
 <div class="modal-content" id="connectModalContent"> <button class="modal-close" id="closeConnectModal">&times;</button>
@@ -2234,8 +2248,47 @@ closeConnectModal();
 });
 }
 
-// --- MODIFICATION: MODAL FUNCTIONALITY (Only for Events) ---
-// This section has been removed as event images now open in a new tab.
+// --- MODAL FUNCTIONALITY (Only for Events) ---
+const eventModal = document.getElementById('eventModal');
+const closeEventModalBtn = document.getElementById('closeEventModal');
+
+const eventItems = document.querySelectorAll('.event-item');
+function openEventModal(item) {
+// Ensure to handle potential local file paths by using the attribute for the modal
+const imgPath = item.getAttribute('data-img');
+const title = item.getAttribute('data-title');
+const description = item.getAttribute('data-description');
+const source = item.getAttribute('data-source');
+
+document.querySelector('#eventModal #modalImage').src = imgPath;
+document.querySelector('#eventModal #modalTitle').textContent = title;
+document.querySelector('#eventModal #modalDescription').textContent = description;
+document.querySelector('#eventModal #modalSource').textContent = source;
+eventModal.classList.add('active');
+document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+function closeEventModal() {
+eventModal.classList.remove('active');
+document.body.style.overflow = '';
+}
+// Attach event listener for events
+eventItems.forEach(item => {
+const imageWrapper = item.querySelector('.event-image-wrapper');
+imageWrapper.addEventListener('click', (e) => {
+e.preventDefault();
+openEventModal(item);
+});
+});
+
+// Close modal via button
+closeEventModalBtn.addEventListener('click', () => closeEventModal());
+
+// Close modal by clicking the overlay
+eventModal.addEventListener('click', (e) => {
+if (e.target.classList.contains('modal-overlay')) {
+closeEventModal();
+}
+});
 
 // --- NEW: EVENT TAB TITLE CHANGER ---
 const originalTitle = document.title;
@@ -2259,8 +2312,7 @@ const track = sliderContainer.querySelector('.event-list');
 const items = sliderContainer.querySelectorAll('.event-item');
 const prevBtn = sliderContainer.querySelector('#event-prev');
 const nextBtn = sliderContainer.querySelector('#event-next');
-// MODIFICATION: Increased gap
-const gap = 32; 
+const gap = 24; // 1.5rem = 24px
 
 let currentIndex = 0;
 let itemsPerView = 3;
