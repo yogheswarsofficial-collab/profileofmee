@@ -1007,31 +1007,64 @@ padding: 0 35px; /* Less padding on mobile */
 .modal-content {
 padding: 1.5rem;
 }
-/* ✅ FIX: Mobile alignment correction for event boxes */
-@media (max-width: 768px) {
+/* ✅ FINAL FIX FOR MOBILE EVENT ALIGNMENT */
+@media screen and (max-width: 768px) {
+
+  /* Reset the entire event layout */
+  .event-list {
+    display: flex;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+  }
+
   .event-item {
-    min-height: auto !important; /* Removes extra tall box */
+    min-height: auto !important;
+    height: auto !important;
+    width: 100% !important;
+    max-width: 360px !important;
     padding: 1rem !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
   }
 
   .event-image-wrapper {
-    height: auto !important; /* Let image scale naturally */
-    max-height: 180px;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 180px !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    margin-bottom: 1rem !important;
   }
 
   .event-image-wrapper img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .event-content {
+    width: 100% !important;
+    text-align: center !important;
   }
 
   .event-content h4 {
-    font-size: 1rem;
+    font-size: 1rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.5rem !important;
   }
 
   .event-content p {
-    font-size: 0.85rem;
-    line-height: 1.5;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .event-content span {
+    font-size: 0.8rem !important;
+    display: block !important;
+    color: var(--purple) !important;
   }
 }
 .modal-image {
