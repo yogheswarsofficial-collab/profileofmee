@@ -31,66 +31,6 @@ body.light-theme {
 --purple: #5a3e8d; /* Darker purple for light theme contrast */
 --blue: #2980b9;  /* Darker blue for light theme contrast */
 }
-/* General mobile fix */
-@media screen and (max-width: 768px) {
-  body {
-    padding: 0 15px;
-    text-align: center;
-  }
-
-  header, section {
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .profile-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .profile-section img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-bottom: 15px;
-  }
-
-  h1, h2, h3, p {
-    text-align: center;
-    line-height: 1.5;
-    margin: 0 auto 10px;
-  }
-
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-  }
-
-  .buttons button, .buttons a {
-    width: 80%;
-    max-width: 250px;
-    text-align: center;
-  }
-
-  /* Fix About Me section */
-  #about {
-    margin-top: 40px;
-    padding: 0 10px;
-  }
-
-  #about p {
-    font-size: 15px;
-    line-height: 1.6;
-    text-align: justify;
-  }
-}
-
 /**************************************************
 * BASE & CURSOR STYLES             *
 **************************************************/
@@ -1066,6 +1006,33 @@ padding: 0 35px; /* Less padding on mobile */
 
 .modal-content {
 padding: 1.5rem;
+}
+/* ✅ FIX: Mobile alignment correction for event boxes */
+@media (max-width: 768px) {
+  .event-item {
+    min-height: auto !important; /* Removes extra tall box */
+    padding: 1rem !important;
+  }
+
+  .event-image-wrapper {
+    height: auto !important; /* Let image scale naturally */
+    max-height: 180px;
+  }
+
+  .event-image-wrapper img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .event-content h4 {
+    font-size: 1rem;
+  }
+
+  .event-content p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
 }
 .modal-image {
 height: 150px;
